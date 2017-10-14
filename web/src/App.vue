@@ -78,4 +78,13 @@ button:hover {
   cursor: pointer;
   background: #84C4E4;
 }
+ul.no-list-style {
+  list-style: none;
+  text-align: left;
+  padding: 0;
+  margin: 0;
+}
+ul.no-list-style li {
+  margin-bottom: 20px;
+}
 </style>

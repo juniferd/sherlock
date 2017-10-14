@@ -17,8 +17,8 @@
       return {
         items: [
           {
-            title: 'Case',
-            route: '/case/1'
+            title: 'All Cases',
+            route: '/'
           },
           {
             title: 'Timeline',

@@ -4,12 +4,19 @@ import Router from 'vue-router'
 import CaseComponent from '@/components/Case'
 import TimelineComponent from '@/components/Timeline'
 import Sidebar from '@/components/Sidebar'
+import AllCases from '@/components/AllCases'
 
 Vue.use(Router)
 
 export default new Router({
   mode: 'history',
   routes: [
+    {
+      path: '/',
+      name: 'Home',
+      components: { default: AllCases, sidebar: Sidebar },
+      props: { default: true, sidebar: true }
+    },
     {
       path: '/case/:id',
       name: 'Case',
