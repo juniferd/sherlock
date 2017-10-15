@@ -87,4 +87,13 @@ ul.no-list-style {
 ul.no-list-style li {
   margin-bottom: 20px;
 }
+.badge {
+  background: #F99C44;
+  color: #fff;
+  padding: 5px;
+  font-size: .75em;
+}
+.badge.solved {
+  background: #12938C;
+}
 </style>

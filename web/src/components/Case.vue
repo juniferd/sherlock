@@ -1,19 +1,24 @@
 <template>
   <div id="case">
-    <h1>Case #{{ $route.params.id }}</h1>
+    <h1>
+      Case #{{ caseFile.id }} 
+      <span v-if="caseFile.status_solved" class="badge solved">Solved!</span>
+      <span v-else class="badge">Unsolved</span>
+    </h1>
+    <p>Last updated {{ getDate(caseFile.date_updated) }}</p>
     <label for="name">Case name</label>
-    <input v-model="name" name="name" placeholder="case name">
+    <input v-model="caseFile.title" name="name" placeholder="case name">
     <br/>
     <label for="description">Case description</label>
-    <textarea v-model="description" name="description" placeholder="description"></textarea>
+    <textarea v-model="caseFile.description" name="description" placeholder="description"></textarea>
     
     <h2>Leads</h2>
     
     <ul class="leads">
-      <li v-for="lead in leads">
-        <div class="number">{{ lead.id }}</div>
+      <li v-for="lead in caseFile.leads">
+        <div class="number">{{ lead.order }}</div>
         <div class="name">
-          {{ lead.name }} <strong>{{ lead.place }}</strong>
+          {{ lead.name }} <strong>{{ lead.location }}</strong>
           {{ lead.description }}
         </div>
       </li>
@@ -25,42 +30,71 @@
       <input v-model="newLeadPlace" name="newLeadPlace">
       <label for="newLeadDesc">New lead description</label>
       <textarea v-model="newLeadDescription" name="newLeadDesc"></textarea>
+      <label for="newLeadType">New lead type</label>
+      <select v-model="newLeadType">
+        <option disabled value="">Please select one</option>
+        <option>person</option>
+        <option>place</option>
+        <option>informant</option>
+      </select>
       <button v-on:click="addLead">Add a lead</button>
     </div>
 
-    <p>case name: {{ name }}</p>
-    <p>case description: {{ description }}</p>
+    <p>{{ caseFile }}</p>
   </div>
 </template>
 
 <script>
+import moment from 'moment'
+
 export default {
   name: 'CaseComponent',
   props: ['id'],
   data: function () {
     return {
-      name: '',
-      description: '',
       leads: [],
       newLeadName: '',
       newLeadPlace: '',
-      newLeadDescription: ''
+      newLeadDescription: '',
+      newLeadType: '',
+      caseFile: {}
     }
   },
   methods: {
     addLead: function (event) {
       let newLead = {}
       newLead.name = this.newLeadName
-      newLead.id = this.leads.length + 1
-      newLead.place = this.newLeadPlace
+      newLead.order = this.caseFile.leads.length + 1
+      newLead.location = this.newLeadPlace
       newLead.description = this.newLeadDescription
-      this.leads.push(newLead)
+      newLead.lead_type = this.newLeadType
+      newLead.case_id = this.caseFile.id
+
+      this.$http.post('/api/lead', newLead).then(function (response) {
+        this.caseFile.leads.push(newLead)
+      }, function (error) {
+        console.log('error posting new lead', error)
+      })
+
       // reset form
       this.newLeadName = ''
       this.newLeadPlace = ''
       this.newLeadDescription = ''
-      // TODO: post here to add lead to db
+      this.newLeadType = ''
+    },
+    getCase: function (id) {
+      this.$http.get('/api/casefile/' + id).then(function (response) {
+        this.caseFile = response.data
+      }, function (error) {
+        console.log('error fetching casefile', error)
+      })
+    },
+    getDate: function (dateTime) {
+      return moment(dateTime).format('DD MMM YYYY, h:mm:ss a')
     }
+  },
+  beforeMount: function () {
+    this.getCase(this.id)
   }
 }
 </script>
@@ -85,7 +119,7 @@ export default {
     top: 30px;
     display: block;
     width: 2px;
-    height: 20px;
+    height: 100%;
     background: #2c3e50;
   }
   ul.leads li:last-child:before {
@@ -99,6 +133,7 @@ export default {
     background: #73BFB8;
     color: #2c3e50;
     width: 30px;
+    min-width: 30px;
     height: 30px;
     border-radius: 15px;
     text-align: center;

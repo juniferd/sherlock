@@ -18,6 +18,18 @@ manager.create_api(Lead, methods=['GET', 'POST', 'DELETE'])
 def hello_world():
     return render_template('app.html')
 
+@app.route('/case/<int:id>')
+def show_case(id):
+    return render_template('app.html')
+
+@app.route('/timeline')
+def show_timeline():
+    return render_template('app.html')
+
+@app.route('/leads')
+def show_leads():
+    return render_template('app.html')
+
 # @app.route('/casefiles', methods=['GET'])
 # def get_all_case_files():
 #     # get all cases from db

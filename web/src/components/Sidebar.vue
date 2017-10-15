@@ -58,13 +58,13 @@ ul#sidebar li a {
   text-decoration: none;
   color: #73BFB8;
 }
-ul#sidebar li a.router-link-active,
-ul#sidebar li a.router-link-active a {
+ul#sidebar li a.router-link-exact-active,
+ul#sidebar li a.router-link-exact-active a {
   background: #73BFB8;
   color: #fff;
 }
 ul#sidebar li a:hover,
-ul#sidebar li a.router-link-active:hover a{
+ul#sidebar li a.router-link-exact-active:hover a{
   background: #99D0CB;
   color: #fff;
 }
