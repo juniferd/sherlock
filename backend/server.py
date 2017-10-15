@@ -1,17 +1,13 @@
 from flask import Flask, request, jsonify, render_template
 from flask_sqlalchemy import SQLAlchemy
-from models import CaseFile, Lead
+from models import CaseFile, Lead, app, db
 from random import randint
-import flask.ext.restless
+import flask_restless
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
-db = SQLAlchemy(app)
-
-manager = flask.ext.restless.APIManager(app, flask_sqlalchemy_db=db)
+manager = flask_restless.APIManager(app, flask_sqlalchemy_db=db)
 
 # APIs here
-manager.create_api(CaseFile, methods=['GET', 'POST', 'DELETE'])
+manager.create_api(CaseFile, methods=['GET', 'POST', 'DELETE', 'PUT'])
 manager.create_api(Lead, methods=['GET', 'POST', 'DELETE'])
 
 @app.route('/')
@@ -37,6 +33,7 @@ def show_leads():
 #     json_case_files = [case.as_dict() for case in case_files]
 #     print 'case files %r' % json_case_files
 #     return jsonify({ 'cases': json_case_files }), 200
+
 
 @app.route('/seed/casefile', methods=['POST'])
 def create_dummy_case_file():

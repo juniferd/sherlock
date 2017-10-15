@@ -11,7 +11,19 @@
     <br/>
     <label for="description">Case description</label>
     <textarea v-model="caseFile.description" name="description" placeholder="description"></textarea>
-    
+    <label>Case status</label>
+    <div class="switch">
+      <input type="checkbox" v-model="caseFile.status_solved">
+      <span class="slider"></span>
+    </div>
+    <br/>
+    <div v-show="caseFile.status_solved">
+      <label>Points</label>
+      <input v-model="caseFile.points">
+    </div>
+    <br/>
+    <button v-on:click="updateCaseFile">Save changes</button>
+
     <h2>Leads</h2>
     
     <ul class="leads">
@@ -37,6 +49,7 @@
         <option>place</option>
         <option>informant</option>
       </select>
+      <br/>
       <button v-on:click="addLead">Add a lead</button>
     </div>
 
@@ -46,6 +59,7 @@
 
 <script>
 import moment from 'moment'
+import _ from 'lodash'
 
 export default {
   name: 'CaseComponent',
@@ -81,6 +95,15 @@ export default {
       this.newLeadPlace = ''
       this.newLeadDescription = ''
       this.newLeadType = ''
+    },
+    updateCaseFile: function (event) {
+      let thisCaseFile = _.omit(this.caseFile, 'leads')
+
+      this.$http.put('/api/casefile/' + this.caseFile.id, thisCaseFile).then(function (response) {
+        console.log('successfully updated case file', response)
+      }, function (error) {
+        console.log('error posting casefile', error)
+      })
     },
     getCase: function (id) {
       this.$http.get('/api/casefile/' + id).then(function (response) {
