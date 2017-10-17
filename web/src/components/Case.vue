@@ -12,7 +12,7 @@
     <label for="description">Case description</label>
     <textarea v-model="caseFile.description" name="description" placeholder="description"></textarea>
     <label>Case status</label>
-    <div class="switch">
+    <div class="switch" v-on:click="caseFile.status_solved = !caseFile.status_solved">
       <input type="checkbox" v-model="caseFile.status_solved">
       <span class="slider"></span>
     </div>

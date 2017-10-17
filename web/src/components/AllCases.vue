@@ -8,15 +8,18 @@
           <a>
             <span>{{ caseFile.id }} <strong>{{ caseFile.title }}</strong></span>
             <br>
-            <span>{{ caseFile.description }}</span>
+            <span>{{ caseFile.description | truncate(50) }}</span>
           </a>
         </router-link>
       </li>
     </ul>
+    <button v-on:click="addCase">Add a case</button>
   </div>
 </template>
 
 <script>
+  import Filters from '../Filters'
+
   export default {
     name: 'AllCases',
     data: function () {
@@ -25,6 +28,7 @@
         caseFiles: {}
       }
     },
+    filters: Filters,
     methods: {
       getCases: function () {
         this.$http.get('/api/casefile').then(function (response) {
@@ -35,6 +39,18 @@
       },
       getRouterLink: function (id) {
         return '/case/' + id
+      },
+      addCase: function () {
+        let params = {
+          title: 'My new case',
+          description: '',
+          status_solved: false
+        }
+        this.$http.post('/api/casefile', params).then(function (response) {
+          this.getCases()
+        }, function (error) {
+          console.log('error adding case', error)
+        })
       }
     },
     beforeMount: function () {

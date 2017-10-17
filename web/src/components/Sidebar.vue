@@ -3,7 +3,7 @@
     <li v-for="item in items">
       <router-link :to="item.route">
         <a>
-          {{ item.title }}
+          {{ item.title | capitalize }}
         </a>
       </router-link>
     </li>
@@ -11,21 +11,23 @@
 </template>
 
 <script>
+  import Filters from '../Filters.js'
   export default {
     name: 'Sidebar',
+    filters: Filters,
     data () {
       return {
         items: [
           {
-            title: 'All Cases',
+            title: 'all cases',
             route: '/'
           },
           {
-            title: 'Timeline',
+            title: 'timeline',
             route: '/timeline'
           },
           {
-            title: 'Leads',
+            title: 'leads',
             route: '/leads'
           }
         ]
