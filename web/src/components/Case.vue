@@ -23,47 +23,73 @@
     </div>
     <br/>
     <button v-on:click="updateCaseFile">Save changes</button>
-
-    <h2>Leads</h2>
-    
-    <ul class="leads">
-      <li v-for="lead in caseFile.leads">
-        <div class="number">{{ lead.order }}</div>
-        <div class="name">
-          {{ lead.name }} <strong>{{ lead.location }}</strong>
-          {{ lead.description }}
-        </div>
+    <!-- subnav here for LEADS, CLUES, SUSPECTS, TIMELINE -->
+    <ul class="sub-nav no-list-style">
+      <li v-for="subNav in subNavs"
+        v-bind:class="{ 'active' : subNav.isActive }"
+        v-on:click="toggleSubNav(subNav.name)">
+        {{ subNav.name }}
       </li>
+      
     </ul>
-    <div class="panel">
-      <label for="newLeadName">New lead name</label>
-      <input v-model="newLeadName" name="newLeadName">
-      <label for="newLeadPlace">New lead place</label>
-      <input v-model="newLeadPlace" name="newLeadPlace">
-      <label for="newLeadDesc">New lead description</label>
-      <textarea v-model="newLeadDescription" name="newLeadDesc"></textarea>
-      <label for="newLeadType">New lead type</label>
-      <select v-model="newLeadType">
-        <option disabled value="">Please select one</option>
-        <option>Person</option>
-        <option>Place</option>
-        <option>Informant</option>
-      </select>
-      <br/>
-      <button v-on:click="addLead">Add a lead</button>
-    </div>
+    <!-- TODO move leads to its own component -->
+    <section class="subnav-section"
+      v-bind:class="{ 'active' : activeSubNav === 'Leads' }">
+      <h2>Leads</h2>
+      
+      <ul class="leads">
+        <li v-for="lead in caseFile.leads">
+          <div class="number">{{ lead.order }}</div>
+          <div class="name">
+            {{ lead.name }} <strong>{{ lead.location }}</strong>
+            {{ lead.description }}
+          </div>
+        </li>
+      </ul>
+      <div class="panel">
+        <label for="newLeadName">New lead name</label>
+        <input v-model="newLeadName" name="newLeadName">
+        <label for="newLeadPlace">New lead place</label>
+        <input v-model="newLeadPlace" name="newLeadPlace">
+        <label for="newLeadDesc">New lead description</label>
+        <textarea v-model="newLeadDescription" name="newLeadDesc"></textarea>
+        <label for="newLeadType">New lead type</label>
+        <select v-model="newLeadType">
+          <option disabled value="">Please select one</option>
+          <option>Person</option>
+          <option>Place</option>
+          <option>Informant</option>
+        </select>
+        <br/>
+        <button v-on:click="addLead">Add a lead</button>
+      </div>
+    </section>
+    
+    <clue-component
+      v-bind:case-id="id"
+      v-bind:active-sub-nav="activeSubNav" 
+      v-bind:case-file="caseFile" />
+    
+    <section class="subnav-section"
+      v-bind:class="{ 'active' : activeSubNav === 'Test' }">
+      blah blah blah test
+    </section>
 
-    <p>{{ caseFile }}</p>
+    {{ caseFile }}
   </div>
 </template>
 
 <script>
 import moment from 'moment'
 import _ from 'lodash'
+import ClueComponent from '@/components/Clue'
 
 export default {
   name: 'CaseComponent',
   props: ['id'],
+  components: {
+    ClueComponent
+  },
   data: function () {
     return {
       leads: [],
@@ -71,7 +97,13 @@ export default {
       newLeadPlace: '',
       newLeadDescription: '',
       newLeadType: '',
-      caseFile: {}
+      caseFile: {},
+      subNavs: [
+        { name: 'Leads', isActive: true },
+        { name: 'Clues', isActive: false },
+        { name: 'Test', isActive: false }
+      ],
+      activeSubNav: 'Leads'
     }
   },
   methods: {
@@ -114,6 +146,12 @@ export default {
     },
     getDate: function (dateTime) {
       return moment(dateTime).format('DD MMM YYYY, h:mm:ss a')
+    },
+    toggleSubNav: function (name) {
+      _.forEach(this.subNavs, function (subNav) {
+        subNav.isActive = subNav.name === name
+      })
+      this.activeSubNav = name
     }
   },
   beforeMount: function () {

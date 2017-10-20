@@ -90,6 +90,26 @@ ul.no-list-style {
 ul.no-list-style li {
   margin-bottom: 20px;
 }
+ul.sub-nav {
+  margin: 20px 0;
+  padding: 5px 0 7px;
+  border-bottom: 1px solid #ccc;
+}
+ul.sub-nav li {
+  cursor: pointer;
+  display: inline;
+  padding: 5px;
+}
+ul.sub-nav li.active {
+  color: #3A8AD3;
+  border-bottom: 3px solid #3A8AD3;
+}
+section.subnav-section {
+  display: none;
+}
+section.subnav-section.active {
+  display: block;
+}
 .badge {
   background: #ccc;
   color: #fff;

@@ -3,6 +3,7 @@ import Router from 'vue-router'
 
 import TimelineComponent from '@/components/Timeline'
 import Sidebar from '@/components/Sidebar'
+import ClueComponent from '@/components/Clue'
 
 const AllCases = () => import(/* webpackChunkName: "all-cases-component" */ '@/components/AllCases')
 const CaseComponent = () => import(/* webpackChunkName: "case-component" */ '@/components/Case')
@@ -21,8 +22,16 @@ export default new Router({
     {
       path: '/case/:id',
       name: 'Case',
-      components: { default: CaseComponent, sidebar: Sidebar },
-      props: { default: true, sidebar: true }
+      components: {
+        default: CaseComponent,
+        sidebar: Sidebar,
+        clue: ClueComponent
+      },
+      props: {
+        default: true,
+        sidebar: true,
+        clue: true
+      }
     },
     {
       path: '/timeline',

@@ -27,6 +27,8 @@ class CaseFile(db.Model):
     leads = db.relationship('Lead', backref='casefile', lazy=True)
     points = db.Column(db.Integer, nullable=True)
     status_solved = db.Column(db.Boolean, nullable=False, default=False)
+    # a case can have multiple Clues
+    clues = db.relationship('Clue', backref="casefile", lazy=True)
 
     def __repr__(self):
         return '<CaseFile %r>' % self.title
