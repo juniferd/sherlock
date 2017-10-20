@@ -26,20 +26,11 @@ def show_timeline():
 def show_leads():
     return render_template('app.html')
 
-# @app.route('/casefiles', methods=['GET'])
-# def get_all_case_files():
-#     # get all cases from db
-#     case_files = CaseFile.query.all()
-#     json_case_files = [case.as_dict() for case in case_files]
-#     print 'case files %r' % json_case_files
-#     return jsonify({ 'cases': json_case_files }), 200
-
-
 @app.route('/seed/casefile', methods=['POST'])
 def create_dummy_case_file():
     dummy_case = CaseFile(
-        title='The Magically Appearing File %r' % randint(1, 100),
-        description='We are called to investigate %r mysterious files' % randint(2, 100),
+        title='The Magically Appearing File %s' % randint(1, 100),
+        description='We are called to investigate %s mysterious files' % randint(2, 100),
         status_solved=False
     )
     db.session.add(dummy_case)

@@ -20,7 +20,7 @@ class CaseFile(db.Model):
     __tablename__ = 'casefile'
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(80), nullable=False)
-    description = db.Column(db.Text, nullable=False)
+    description = db.Column(db.Text, nullable=False, default='')
     date_updated = db.Column(db.DateTime, nullable=False,
         default=datetime.utcnow)
     #  a case can have multiple leads 
@@ -34,7 +34,6 @@ class CaseFile(db.Model):
     def as_dict(self):
        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
-
 class Lead(db.Model):
     __tablename__ = 'lead'
     id = db.Column(db.Integer, primary_key=True)
@@ -42,7 +41,7 @@ class Lead(db.Model):
     # a lead has one case
     case_id = db.Column(db.Integer, db.ForeignKey('casefile.id'), nullable=False)
     order = db.Column(db.Integer, nullable=False)
-    lead_type = db.Column(db.Enum('person', 'place', 'informant'), nullable=False)
+    lead_type = db.Column(db.Enum('Person', 'Place', 'Informant'), nullable=False)
     location = db.Column(db.String(20), nullable=False)
     description = db.Column(db.Text, nullable=True)
 
@@ -51,3 +50,38 @@ class Lead(db.Model):
 
     def as_dict(self):
        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+
+# TODO hook up suspects and clues
+suspects = db.Table('suspects',
+    db.Column('suspect_id', db.Integer, db.ForeignKey('suspect.id'), 
+        primary_key=True),
+    db.Column('clue_id', db.Integer, db.ForeignKey('clue.id'), 
+        primary_key=True)    
+)
+
+class Clue(db.Model):
+    __tablename__ = 'clue'
+    id = db.Column(db.Integer, primary_key=True)
+    # a clue has one case
+    case_id = db.Column(db.Integer, db.ForeignKey('casefile.id'), nullable=False)
+    title = db.Column(db.String(150), nullable=True)
+    description = db.Column(db.Text, nullable=True)
+    clue_type = db.Column(db.Enum(
+        'Direct',
+        'Hearsay',
+        'Circumstantial',
+        'Other'), nullable=False)
+    clue_source = db.Column(db.String(50), nullable=False)
+    # a clue can be used to build a timeline
+    date_started = db.Column(db.DateTime, nullable=True)
+    date_ended = db.Column(db.DateTime, nullable=True)
+    suspects = db.relationship('Suspect', secondary=suspects, lazy='subquery',
+        backref=db.backref('clues', lazy=True))
+
+    def __repr__(self):
+        return '<Clue %s>' % self.id
+
+class Suspect(db.Model):
+    __tablename__ = 'suspect'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), nullable=False)

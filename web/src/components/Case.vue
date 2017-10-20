@@ -45,9 +45,9 @@
       <label for="newLeadType">New lead type</label>
       <select v-model="newLeadType">
         <option disabled value="">Please select one</option>
-        <option>person</option>
-        <option>place</option>
-        <option>informant</option>
+        <option>Person</option>
+        <option>Place</option>
+        <option>Informant</option>
       </select>
       <br/>
       <button v-on:click="addLead">Add a lead</button>

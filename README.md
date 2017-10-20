@@ -6,13 +6,22 @@ full stack project using Vue.js, flask, SQLAlchemy
 
 ```
 # install dependencies
+cd web
 npm install
+cd ../backend
 pip install -r backend/requirements.txt
 
 # build for production with minification
 # from web/ directory (this will build assets in backend/static/ and backend/templates
+cd web
 npm run build
 ```
+
+## init db
+```
+python backend/init.py
+```
+
 ## Run server
 
 ```
