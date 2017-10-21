@@ -33,37 +33,10 @@
       
     </ul>
     <!-- TODO move leads to its own component -->
-    <section class="subnav-section"
-      v-bind:class="{ 'active' : activeSubNav === 'Leads' }">
-      <h2>Leads</h2>
-      
-      <ul class="leads">
-        <li v-for="lead in caseFile.leads">
-          <div class="number">{{ lead.order }}</div>
-          <div class="name">
-            {{ lead.name }} <strong>{{ lead.location }}</strong>
-            {{ lead.description }}
-          </div>
-        </li>
-      </ul>
-      <div class="panel">
-        <label for="newLeadName">New lead name</label>
-        <input v-model="newLeadName" name="newLeadName">
-        <label for="newLeadPlace">New lead place</label>
-        <input v-model="newLeadPlace" name="newLeadPlace">
-        <label for="newLeadDesc">New lead description</label>
-        <textarea v-model="newLeadDescription" name="newLeadDesc"></textarea>
-        <label for="newLeadType">New lead type</label>
-        <select v-model="newLeadType">
-          <option disabled value="">Please select one</option>
-          <option>Person</option>
-          <option>Place</option>
-          <option>Informant</option>
-        </select>
-        <br/>
-        <button v-on:click="addLead">Add a lead</button>
-      </div>
-    </section>
+    <lead-component
+      v-bind:case-id="id"
+      v-bind:active-sub-nav="activeSubNav"
+      v-bind:case-file="caseFile"/>
     
     <clue-component
       v-bind:case-id="id"
@@ -75,7 +48,6 @@
       blah blah blah test
     </section>
 
-    {{ caseFile }}
   </div>
 </template>
 
@@ -83,12 +55,14 @@
 import moment from 'moment'
 import _ from 'lodash'
 import ClueComponent from '@/components/Clue'
+import LeadComponent from '@/components/Lead'
 
 export default {
   name: 'CaseComponent',
   props: ['id'],
   components: {
-    ClueComponent
+    ClueComponent,
+    LeadComponent
   },
   data: function () {
     return {
@@ -107,27 +81,6 @@ export default {
     }
   },
   methods: {
-    addLead: function (event) {
-      let newLead = {}
-      newLead.name = this.newLeadName
-      newLead.order = this.caseFile.leads.length + 1
-      newLead.location = this.newLeadPlace
-      newLead.description = this.newLeadDescription
-      newLead.lead_type = this.newLeadType
-      newLead.case_id = this.caseFile.id
-
-      this.$http.post('/api/lead', newLead).then(function (response) {
-        this.caseFile.leads.push(newLead)
-      }, function (error) {
-        console.log('error posting new lead', error)
-      })
-
-      // reset form
-      this.newLeadName = ''
-      this.newLeadPlace = ''
-      this.newLeadDescription = ''
-      this.newLeadType = ''
-    },
     updateCaseFile: function (event) {
       let thisCaseFile = _.omit(this.caseFile, 'leads')
 
@@ -161,45 +114,5 @@ export default {
 </script>
 
 <style scoped>
-  ul.leads {
-    text-align: left;
-    list-style: none;
-    margin: 20px 0;
-    padding: 0;
-  }
-  ul.leads li {
-    display: flex;
-    justify-content: flex-start;
-    margin-bottom: 20px;
-    position: relative;
-  }
-  ul.leads li:before{
-    content: '';
-    position: absolute;
-    left: 14px;
-    top: 30px;
-    display: block;
-    width: 2px;
-    height: 100%;
-    background: #2c3e50;
-  }
-  ul.leads li:last-child:before {
-    background: none;
-    display: none;
-  }
-  ul.leads li div {
-    line-height: 30px;
-  }
-  ul.leads li div.number {
-    background: #73BFB8;
-    color: #2c3e50;
-    width: 30px;
-    min-width: 30px;
-    height: 30px;
-    border-radius: 15px;
-    text-align: center;
-    font-size: 12px;
-    margin: 0 10px 0 0;
 
-  }
 </style>

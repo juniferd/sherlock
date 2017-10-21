@@ -4,6 +4,7 @@ import Router from 'vue-router'
 import TimelineComponent from '@/components/Timeline'
 import Sidebar from '@/components/Sidebar'
 import ClueComponent from '@/components/Clue'
+import LeadComponent from '@/components/Lead'
 
 const AllCases = () => import(/* webpackChunkName: "all-cases-component" */ '@/components/AllCases')
 const CaseComponent = () => import(/* webpackChunkName: "case-component" */ '@/components/Case')
@@ -25,7 +26,8 @@ export default new Router({
       components: {
         default: CaseComponent,
         sidebar: Sidebar,
-        clue: ClueComponent
+        clue: ClueComponent,
+        lead: LeadComponent
       },
       props: {
         default: true,
