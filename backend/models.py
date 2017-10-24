@@ -53,7 +53,6 @@ class Lead(db.Model):
     def as_dict(self):
        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
-# TODO hook up suspects and clues
 suspects = db.Table('suspects',
     db.Column('suspect_id', db.Integer, db.ForeignKey('suspect.id'), 
         primary_key=True),

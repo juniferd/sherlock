@@ -3,11 +3,13 @@ import Router from 'vue-router'
 
 import TimelineComponent from '@/components/Timeline'
 import Sidebar from '@/components/Sidebar'
-import ClueComponent from '@/components/Clue'
-import LeadComponent from '@/components/Lead'
+
+import CaseComponent from '@/components/Case'
 
 const AllCases = () => import(/* webpackChunkName: "all-cases-component" */ '@/components/AllCases')
-const CaseComponent = () => import(/* webpackChunkName: "case-component" */ '@/components/Case')
+const LeadComponent = () => import(/* webpackChunkName: "lead-component" */ '@/components/Lead')
+const ClueComponent = () => import(/* webpackChunkName: "clue-component" */ '@/components/Clue')
+// const SuspectComponent = () => import(/* webpackChunkName: "suspect-component" */ '@/components/Suspect')
 
 Vue.use(Router)
 

@@ -3,20 +3,23 @@
     id="clue_component"
     v-bind:class="{ 'active' : activeSubNav === 'Clues'}">
     <h2>Clues</h2>
-    <p> {{ test}} </p>
-    <ul class="clue-type clue-direct">
-      <li v-for="clue in caseFile.clues">
-        {{ clue }}
+    <p class="align-left">
+      Sort by <select class="align-left"
+        v-model.lazy="clueSortBy"
+        v-on:change="changeClueSort"
+        placeholder="Sort clues by">
+        <option v-for="item in clueSorts">{{ item }}</option>
+      </select>
+    </p>
+    <ul>
+      <li class="clue" v-for="clue in caseFile.clues">
+        <p class="no-margin"><strong>{{ clue.title }}</strong></p>
+        <p class="no-margin">{{ clue.description }}</p>
+        <p class="no-margin">Source: {{ clue.clue_source }}</p>
+        <p class="no-margin">Type: {{ clue.clue_type }}</p>
+        <p class="no-margin" v-if="clue.date_started">Date started: {{ clue.date_started }}</p>
+        <p class="no-margin" v-if="clue.date_ended">Date ended: {{ clue.date_ended }}</p>
       </li>
-    </ul>
-    <ul class="clue-type clue-hearsay">
-
-    </ul>
-    <ul class="clue-type clue-circumstantial">
-
-    </ul>
-    <ul class="clue-type clue-other">
-
     </ul>
 
     <div class="panel">
@@ -67,7 +70,9 @@ export default {
         date_started: null,
         date_ended: null,
         case_id: this.caseId
-      }
+      },
+      clueSortBy: 'id',
+      clueSorts: ['title', 'type', 'source', 'id']
     }
   },
   methods: {
@@ -78,10 +83,81 @@ export default {
       }, function (error) {
         console.log('error posting new clue', error)
       })
+    },
+    changeClueSort: function (event) {
+      console.log('>>>>>', this.clueSortBy)
+      let clues = this.caseFile.clues
+
+      switch (this.clueSortBy) {
+        case 'title':
+          clues.sort(function (a, b) {
+            if (a.title < b.title) {
+              return -1
+            }
+            if (a.title > b.title) {
+              return 1
+            }
+            return 0
+          })
+          break
+        case 'type':
+          clues.sort(function (a, b) {
+            if (a.clue_type < b.clue_type) {
+              return -1
+            }
+            if (a.clue_type > b.clue_type) {
+              return 1
+            }
+            return 0
+          })
+          break
+        case 'source':
+          clues.sort(function (a, b) {
+            if (a.clue_source < b.clue_source) {
+              return -1
+            }
+            if (a.clue_source > b.clue_source) {
+              return 1
+            }
+            return 0
+          })
+          break
+        default:
+          clues.sort(function (a, b) {
+            return a.id - b.id
+          })
+      }
+    }
+  },
+  computed: {
+    clueSortBy: {
+      get () {
+        return null
+      },
+      set (optionValue) {
+        this.clueSorts = this.clueSorts.filter(function (o) {
+          return o !== optionValue
+        })
+      }
     }
   }
 }
 </script>
 
 <style scoped>
+ul li.clue {
+  text-align: left;
+  margin-bottom: 20px;
+}
+p.no-margin {
+  margin: 0;
+}
+p.align-left {
+  text-align: left;
+}
+select.align-left {
+  margin: 0;
+  text-align: left;
+  display: inline;
+}
 </style>

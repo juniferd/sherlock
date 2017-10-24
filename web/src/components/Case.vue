@@ -43,10 +43,10 @@
       v-bind:active-sub-nav="activeSubNav" 
       v-bind:case-file="caseFile" />
     
-    <section class="subnav-section"
-      v-bind:class="{ 'active' : activeSubNav === 'Test' }">
-      blah blah blah test
-    </section>
+   <!--  <suspect-component
+      v-bind:case-id="id"
+      v-bind:active-sub-nav="activeSubNav"
+      v-bind:case-file="caseFile" /> -->
 
   </div>
 </template>
@@ -54,8 +54,10 @@
 <script>
 import moment from 'moment'
 import _ from 'lodash'
+
 import ClueComponent from '@/components/Clue'
 import LeadComponent from '@/components/Lead'
+// import SuspectComponent from '@/components/Suspect'
 
 export default {
   name: 'CaseComponent',
@@ -74,8 +76,7 @@ export default {
       caseFile: {},
       subNavs: [
         { name: 'Leads', isActive: true },
-        { name: 'Clues', isActive: false },
-        { name: 'Test', isActive: false }
+        { name: 'Clues', isActive: false }
       ],
       activeSubNav: 'Leads'
     }
