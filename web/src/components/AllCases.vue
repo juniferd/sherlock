@@ -9,6 +9,7 @@
             <span>{{ caseFile.id }} <strong>{{ caseFile.title }}</strong></span>
             <br>
             <span>{{ caseFile.description | truncate(50) }}</span>
+            <span v-if="caseFile.status_solved" class="badge solved">Solved!</span>
           </a>
         </router-link>
       </li>
@@ -60,5 +61,7 @@
 </script>
 
 <style scoped>
-
+  a {
+    text-decoration: none;
+  }
 </style>

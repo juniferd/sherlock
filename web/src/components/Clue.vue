@@ -30,14 +30,14 @@
       <textarea v-model="newClue.description" name="newClueDescription"></textarea>
 
       <label for="newClueType">Clue type</label>
-      <select v-model="newClue.clue_type">
+      <!-- <select v-model="newClue.clue_type">
         <option disabled value="">Please select one</option>
         <option>Direct</option>
         <option>Hearsay</option>
         <option>Circumstantial</option>
         <option>Other</option>
-      </select>
-
+      </select> -->
+      <v-select v-model="newClue.clue_type" :options="options"></v-select>
       <label for="newClueSource">Clue source</label>
       <input v-model="newClue.clue_source">
 
@@ -55,10 +55,14 @@
 </template>
 
 <script>
-
+import _ from 'lodash'
+import vSelect from 'vue-select'
 export default {
   name: 'ClueComponent',
   props: ['caseId', 'activeSubNav', 'caseFile'],
+  components: {
+    vSelect
+  },
   data: function () {
     return {
       test: 'hi there' + this.caseId,
@@ -72,17 +76,29 @@ export default {
         case_id: this.caseId
       },
       clueSortBy: 'id',
-      clueSorts: ['title', 'type', 'source', 'id']
+      clueSorts: ['title', 'type', 'source', 'id'],
+      options: ['Direct', 'Hearsay', 'Circumstantial', 'Other']
     }
   },
   methods: {
     addClue: function (event) {
-      this.$http.post('/api/clue', this.newClue).then(function (response) {
-        console.log('yay success clues', this.newClue)
-        this.caseFile.clues.push(this.newClue)
+      let thisClue = _.clone(this.newClue)
+      this.$http.post('/api/clue', thisClue).then(function (response) {
+        console.log('yay success clues', thisClue)
+        this.caseFile.clues.push(thisClue)
       }, function (error) {
         console.log('error posting new clue', error)
+      }).finally(function () {
+        this.resetClueForm()
       })
+    },
+    resetClueForm: function () {
+      this.newClue.title = ''
+      this.newClue.description = ''
+      this.newClue.clue_type = ''
+      this.newClue.clue_source = ''
+      this.newClue.date_started = null
+      this.newClue.date_ended = null
     },
     changeClueSort: function (event) {
       console.log('>>>>>', this.clueSortBy)

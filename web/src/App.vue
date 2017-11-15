@@ -29,7 +29,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin: 60px 0;
+  margin: 20px 0;
 }
 #main_content {
   margin: 0 20px 0 220px;
@@ -158,5 +158,8 @@ section.subnav-section.active {
   -webkit-transform: translateX(26px);
   -ms-transform: translateX(26px);
   transform: translateX(26px);
+}
+.dropdown-toggle {
+  margin-bottom: 20px;
 }
 </style>

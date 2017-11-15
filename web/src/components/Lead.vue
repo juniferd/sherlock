@@ -20,13 +20,7 @@
       <label>Description</label>
       <textarea v-model="newLead.description"></textarea>
       <label>New lead type</label>
-      <!-- TODO hook this up -->
-      <select v-model="newLead.lead_type" placeholder="Please select one">
-        <option v-for="item in options">
-          {{ item }}
-        </option>
-      </select>
-
+      <v-select v-model="newLead.lead_type" :options="options"></v-select>
       <br/>
       <button v-on:click="addLead">Add a lead</button>
     </div>
@@ -34,9 +28,15 @@
 </template>
 
 <script>
+import _ from 'lodash'
+import vSelect from 'vue-select'
+
 export default {
   name: 'LeadComponent',
   props: ['caseId', 'activeSubNav', 'caseFile'],
+  components: {
+    vSelect
+  },
   data: function () {
     return {
       newLead: {
@@ -51,14 +51,25 @@ export default {
   },
   methods: {
     addLead: function (event) {
+      let thisLead
       this.newLead.order = this.caseFile.leads.length + 1
 
+      thisLead = _.clone(this.newLead)
+
       this.$http.post('/api/lead', this.newLead).then(function (response) {
-        this.caseFile.leads.push(this.newLead)
+        this.caseFile.leads.push(thisLead)
       }, function (error) {
         console.log('error posting new lead', error)
+      }).finally(function () {
+        // reset form
+        this.resetLeadForm()
       })
-      // reset form
+    },
+    resetLeadForm: function () {
+      this.newLead.name = ''
+      this.newLead.location = ''
+      this.newLead.description = ''
+      this.newLead.lead_type = 'Person'
     }
   }
 }

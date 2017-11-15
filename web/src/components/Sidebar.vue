@@ -21,15 +21,15 @@
           {
             title: 'all cases',
             route: '/'
-          },
-          {
-            title: 'timeline',
-            route: '/timeline'
-          },
-          {
-            title: 'leads',
-            route: '/leads'
           }
+          // {
+          //   title: 'timeline',
+          //   route: '/timeline'
+          // },
+          // {
+          //   title: 'leads',
+          //   route: '/leads'
+          // }
         ]
       }
     }
