@@ -1,3 +1,5 @@
 sherlockenv/
 static/
 *.db
+backend/*.db
+backend/test.db

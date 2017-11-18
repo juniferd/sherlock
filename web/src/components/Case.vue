@@ -1,6 +1,6 @@
 <template>
   <div id="case">
-    <div class="sticky-header" v-sticky="{ zIndex: 10, stickyTop: 0 }">
+    <div class="sticky-header top-nav" v-sticky="{ zIndex: 10, stickyTop: 0 }">
       <div>
         <h1>
           Case #{{ caseFile.id }}
@@ -10,24 +10,28 @@
         </h1>
       </div>
     </div>
-    <p>Last updated {{ getDate(caseFile.date_updated) }}</p>
-    <label for="name">Case name</label>
-    <input v-model="caseFile.title" name="name" placeholder="case name">
-    <br/>
-    <label for="description">Case description</label>
-    <textarea v-model="caseFile.description" name="description" placeholder="description"></textarea>
-    <label>Case status</label>
-    <div class="switch" v-on:click="caseFile.status_solved = !caseFile.status_solved">
-      <input type="checkbox" v-model="caseFile.status_solved">
-      <span class="slider"></span>
+
+    <div class="width-50 align-left">
+      <p>Last updated {{ getDate(caseFile.date_updated) }}</p>
+      <label for="name">Case name</label>
+      <input v-model="caseFile.title" name="name" placeholder="case name">
+      <br/>
+      <label for="description">Case description</label>
+      <textarea v-model="caseFile.description" name="description" placeholder="description"></textarea>
+      <label>Case status</label>
+      <div class="switch" v-on:click="caseFile.status_solved = !caseFile.status_solved">
+        <input type="checkbox" v-model="caseFile.status_solved">
+        <span class="slider"></span>
+      </div>
+      <br/>
+      <div v-show="caseFile.status_solved">
+        <label>Points</label>
+        <input v-model="caseFile.points">
+      </div>
+      <br/>
+      <button v-on:click="updateCaseFile">Save changes</button>
     </div>
-    <br/>
-    <div v-show="caseFile.status_solved">
-      <label>Points</label>
-      <input v-model="caseFile.points">
-    </div>
-    <br/>
-    <button v-on:click="updateCaseFile">Save changes</button>
+
     <!-- subnav here for LEADS, CLUES, SUSPECTS, TIMELINE -->
     <div class="sticky-header" v-sticky="{ zIndex: 9, stickyTop: 40}">
       <div>
@@ -129,6 +133,9 @@ export default {
   .sticky-header {
     background: #ffffff;
     padding: 0;
+  }
+  .sticky-header.top-nav{
+    min-height:40px;
   }
   .sticky-header h1 {
     display: -webkit-box;

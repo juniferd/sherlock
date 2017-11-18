@@ -12,7 +12,7 @@
         </div>
       </li>
     </ul>
-    <div class="panel">
+    <div class="panel width-50 align-left">
       <label>New lead name</label>
       <input v-model="newLead.name">
       <label>Place</label>

@@ -22,7 +22,7 @@
       </li>
     </ul>
 
-    <div class="panel">
+    <div class="panel width-50 align-left">
       <label for="newClueTitle">New clue name</label>
       <input v-model="newClue.title" name="newClueTitle">
 

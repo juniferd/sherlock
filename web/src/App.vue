@@ -162,4 +162,16 @@ section.subnav-section.active {
 .dropdown-toggle {
   margin-bottom: 20px;
 }
+.width-50 {
+  width: 50%;
+}
+.align-left {
+  text-align: left;
+}
+
+@media only screen and (max-width: 768px) {
+  .width-50 {
+    width: 100%;
+  }
+}
 </style>
